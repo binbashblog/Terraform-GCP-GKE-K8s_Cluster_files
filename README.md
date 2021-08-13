@@ -5,9 +5,9 @@
 
 1) Download Terraform binary:
 
-`wget https://releases.hashicorp.com/terraform/0.12.1/terraform_0.12.1_linux_amd64.zip`
+`wget https://releases.hashicorp.com/terraform/1.0.4/terraform_1.0.4_linux_amd64.zip`
 
-`unzip terraform_0.12.1_linux_amd64.zip -d /usr/local/bin`
+`unzip terraform_1.0.4_linux_amd64.zip -d /usr/local/bin`
 
 2) Verify you can run terraform:
 
@@ -42,16 +42,21 @@ Or via your package manager, i.e for Ubuntu/Debian:
 
 ### Provision a cluster via gcloud CLI for testing:
 
-1) You can very easily create a GKE cluster by running:
-`gcloud container clusters create testk8s-cluster --zone europe-west2-c`
+1) You can very easily create a GKE cluster by running:  
+`gcloud container clusters create \`   
+`  --machine-type e2-micro \`  
+`  --num-nodes 1 \`    
+`  --zone us-east1-a \`   
+`  --cluster-version latest \`   
+`  testk8s-cluster`
 
-Creating cluster testk8s-cluster in europe-west2-c...
+Creating cluster testk8s-cluster in us-east1-a...
 Cluster is being deployed...
 Cluster is being health-checked...
 
 2) When the cluster is created you will find a kubeconfig file the the directory you ran the command from.
     
-3) Install kubectl if you haven't alraeady:
+3) Install kubectl if you haven't alraeady:  
 `sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl` 
 
 `echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list`
@@ -60,8 +65,8 @@ Cluster is being health-checked...
 
 4)  Run `kubectl get nodes` 
 5)  Run `gcloud container clusters update` to change settings in the cluster such as the number of nodes.
-6)  Destroy the cluster by running:
-`gcloud container clusters delete testk8s-cluster --zone europe-west2-c`
+6)  Destroy the cluster by running:   
+`gcloud container clusters delete testk8s-cluster --zone us-east1-a`   
 NOTE: be careful not to run this on a production cluster for obvious reasons!
 
 # Provision GKE K8s via Terraform
@@ -80,7 +85,7 @@ NOTE: be careful not to run this on a production cluster for obvious reasons!
    
 7) Inspect your directry tree structure, you will now see the state and kubeconfig files have been generated. 
    
-8) Run `export KUBECONFIG="${PWD}/kubeconfig-prod"`
+8) Run `export KUBECONFIG="${PWD}/kubeconfig-prod"`   
 Then run: `kubectl get pods --all-namespaces` 
 
 9)  Now you can create deployments in the cluster and apply them like any other kubernetes:
@@ -91,7 +96,7 @@ Then run: `kubectl get pods --all-namespaces`
 NOTE: be careful not to run this in production!
 
 ## Expose your pods via a LoadBalancer
-NOTE: this will incur charges!
+NOTE: this will incur charges!   
 `kubectl create -f svc-loadbalancer.yaml`
 
 `kubectl get services`

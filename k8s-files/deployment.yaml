@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-gke-k8s
+spec:
+  selector:
+    matchLabels:
+      app: hello-gke-k8s
+  template:
+    metadata:
+      labels:
+        app: hello-gke-k8s
+    spec:
+      containers:
+      - name: hello-kubernetes
+        image: paulbouwer/hello-kubernetes:1.10
+        ports:
+        - containerPort: 8080
